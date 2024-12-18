@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}
+    Weather
+{% endblock %}
+{% block style %}
+    .shadow{
+        box-shadow:2px 2px 3px 1px lightslategrey;
+}       padding: 20px;
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="offset-md-3 col-md-6">
+            <h3 class=" mt-5 border-bottom text-center text-primary"><i class="fa fa-cloud-sun"> Django Weather Apllication</i></h3>
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                            <div class="alert alert-danger">
+                                {{ message }}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %} 
+                {% endif %}
+                <div class="input-group float-end">
+                    {{form.name}}
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary mx-1" type="submit"><span class="fa fa-add">Add City</span></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% for city_weather in data %}
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center ">
+      <div class="col-md-8 col-lg-6 col-xl-4">
+        <div class="input-group rounded mb-3">
+        </div>
+        <div class="card shadow-0 border">
+          <div class="card-body p-4">
+              <a type='submit' class="btn float-end" href="delete/{{ city_weather.city }}">&#10060;</a>
+              <h4 class="mb-1 sfw-normal">{{ city_weather.city|title }}</h4>
+              <p class="mb-2">Current temperature: <strong>{{city_weather.temperature }}°C</strong></p>
+              <p>Feels like: <strong>{{city_weather.description}}</strong></p>
+              <p>Country:<strong>{{city_weather.country}}</strong>
+
+            <div class="d-flex flex-row align-items-center">
+              <p class="mb-0 me-4">{{city_weather.description}}</p>
+              <img src="https://openweathermap.org/img/w/{{city_weather.icon}}.png" style="color: #eee;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+{% endblock %}
